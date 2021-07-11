@@ -1,0 +1,71 @@
+﻿@model LLVBog.Models.Account
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width" />
+    <title>Login</title>
+    <link rel="stylesheet" href="~/Content/Login/Style1.css">
+</head>
+<body>
+    <!-- partial:index.partial.html -->
+    <div class="login-reg-panel">
+        <div class="login-info-box">
+            <h2>Quay lại đăng nhập?</h2>
+            <p>Trở lại trang đăng nhập.</p>
+            <label id="label-register" for="log-reg-show">Đăng nhập</label>
+            <input type="radio" name="active-log-panel" id="log-reg-show" checked="checked">
+        </div>
+
+        <div class="register-info-box">
+            <h2>Bạn không có tài khoản ?</h2>
+            <p>Hãy tham gia cùng chúng tôi bằng cách đăng ký tài khoản.</p>
+            <label id="label-login" for="log-login-show">Đăng ký</label>
+            <input type="radio" name="active-log-panel" id="log-login-show">
+        </div>
+
+        <div class="white-panel">
+            <form name="fLogin" onsubmit="return validateForm()" action="/Login/Login" method="post" class="login-show">
+                @Html.AntiForgeryToken()
+                <h2>ĐĂNG NHẬP</h2>
+                <label style="color:red">@ViewBag.Message</label>
+                <input id="Username" name="Username" type="text" placeholder="Tên đăng nhập/Email">
+                <input id="Password" name="Password" type="password" placeholder="Mật khẩu">
+                <input type="submit" name="submit" value="Đăng nhập">
+            </form>
+            <div class="forgot-show">
+                <label id="label-login" for="log-forgot-show">Quên mật khẩu</label>
+                <input type="radio" name="active-log-panel" id="log-forgot-show">
+            </div>
+            <form name="fRegister" onsubmit="return validateRForm()" action="/Login/Register" method="post" class="register-show">
+                @Html.AntiForgeryToken()
+                <h2>ĐĂNG KÝ</h2>
+                <input id="FirstName" name="FirstName" type="text" placeholder="Họ">
+                <input id="LastName" name="LastName" type="text" placeholder="Tên">
+                <input id="Username" name="Username" type="text" placeholder="Tên đăng nhập">
+                <input id="Gmail" name="Gmail" type="email" placeholder="Email">
+                <input id="Password" name="Password" type="password" placeholder="Mật khẩu">
+
+                <input name="Repeat_Pass" type="password" placeholder="Xác nhận mật khẩu">
+                <input type="submit" name="submit" value="Đăng ký">
+            </form>
+            <form action="/Login/ForgetPassword" method="post" class="forgotPassword-show">
+                @Html.AntiForgeryToken()
+                <h2>QUÊN MẬT KHẨU</h2>
+                <input id="Gmail" name="Gmail" type="email" placeholder="Email">
+                <input type="submit" name="submit" value="Gửi">
+            </form>
+        </div>
+    </div>
+    <!-- partial -->
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
+    <script src="~/Scripts/Login/script1.js"></script>
+
+</body>
+</html>

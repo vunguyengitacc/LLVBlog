@@ -1,0 +1,101 @@
+﻿@model IEnumerable<LLVBog.Models.Account>
+@{
+    ViewBag.Title = "index";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="row">
+    <div class="col-lg-12" style="color:forestgreen">
+        <h1 class="page-header">ACCOUNT</h1>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+<!-- /.row -->
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-heading" style="color:green">
+                LIST ACCOUNT TABLE
+            </div>
+            <!-- /.panel-heading -->
+            <div class="panel-body">
+                <div class="table-responsive">
+                    <div id="dataTables-example_wapper" class="dataTables_wrapper form-inline dt-bootstrap no-footer">
+                        <div class="row">
+
+                            <div class="col-sm-6">
+                                <div class="dataTables_length" id="dataTables-example_length">
+                                    <label>
+                                        Show
+                                        <select name="dataTables-example_length" aria-controls="dataTables-example" class="form-control input-sm">
+                                            <option value="all">All</option>
+                                            <option value="5">5</option>
+                                            <option value="25">25</option>
+                                            <option value="50">50</option>
+                                            <option value="100">100</option>
+
+                                        </select>
+                                        entries
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div id="dataTables-example_filter" class="dataTables_filter">
+                                    <label>
+                                        Search:
+                                        <input type="search" class="form-control input-sm" aria-controls="dataTables-example" />
+                                    </label>
+                                </div>
+
+                            </div>
+
+                        </div>
+                        <div class="row">
+
+                            <div class="col-sm-12">
+
+                                <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+                                    <thead>
+                                        <tr bold="1" style="background-color: forestgreen">
+                                            <th>UserName</th>
+                                            <th>FirstName</th>
+                                            <th>LastName</th>
+                                            <th>CreateDate</th>
+                                            <th>Gmail</th>
+                                            <th>RoleID</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in Model)
+                                        {
+                                            <tr>
+                                                <td>@item.Username</td>
+                                                <td>@item.FirstName</td>
+                                                <td>@item.LastName</td>
+                                                <td>@item.CreatedDate</td>
+                                                <td>@item.Gmail</td>
+                                                <td>@item.RoleID</td>
+
+                                            </tr>
+
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <!-- /.table-responsive -->
+
+                    </div>
+                    <!-- /.panel-body -->
+                </div>
+                <!-- /.panel -->
+            </div>
+            <!-- /.col-lg-12 -->
+        </div>
+
+
+
+    </div>
+    <!-- /.container-fluid -->
+</div>
+<!-- /#page-wrapper -->

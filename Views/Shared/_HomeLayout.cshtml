@@ -1,0 +1,134 @@
+﻿@using LLVBog.Models 
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>LVL.blog</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i&display=swap"
+          rel="stylesheet">
+
+    @Styles.Render("~/Content/Home/vendor/bootstrap.min.css")
+    @Styles.Render("~/Content/Home/css/fontawesome.css")
+    @Styles.Render("~/Content/Home/css/templatemo-stand-blog.css")
+    @Styles.Render("~/Content/Home/css/owl.css")
+    <script src="https://cdn.ckeditor.com/4.16.1/standard/ckeditor.js"></script>
+</head>
+<body>
+    <header class="">
+        <nav class="navbar navbar-expand-lg">
+            <div class="container">
+                <a class="navbar-brand" href="index.html">
+                    <h2><em>LVL</em>.blog</h2>
+                </a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
+                        aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarResponsive">
+                    <ul class="navbar-nav ml-auto">
+                        @if (ViewBag.Page == "Home")
+                        {
+                            <li class="nav-item active">
+                                <a class="nav-link" href="/Home">
+                                    Trang chủ
+                                    <span class="sr-only">(current)</span>
+                                </a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" href="/Home">
+                                    Trang chủ
+                                    <span class="sr-only">(current)</span>
+                                </a>
+                            </li>
+                        }
+                        @if (ViewBag.Page == "Blog")
+                        {
+                            <li class="nav-item active">
+                                <a class="nav-link" href="/Blog/Index?page=1">Danh sách bài đăng</a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" href="/Blog/Index?page=1">Danh sách bài đăng</a>
+                            </li>
+                        }
+                        @if (ViewBag.Page == "Contact")
+                        {
+                            <li class="nav-item active">
+                                <a class="nav-link" href="contact.html">Liên hệ</a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" href="contact.html">Liên hệ</a>
+                            </li>
+                        }
+                        @if (Session["Username"] == null)
+                        {
+
+                            <li class="nav-item">
+                                <a class="nav-link btn-login" href="/Login/Login">Đăng nhập</a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">                                
+                                <a class="nav-link btn-login" href="/Profile/Me">
+                                    @Session["Username"]
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    @RenderBody()
+
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <ul class="social-icons">
+                        <li><a href="#">Facebook</a></li>
+                        <li><a href="#">Twitter</a></li>
+                        <li><a href="#">Behance</a></li>
+                        <li><a href="#">Linkedin</a></li>
+                        <li><a href="#">Dribbble</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-12">
+                    <div class="copyright-text">
+                        <p>
+                            Copyright 2020 Stand Blog Co.
+
+                            | Design: <a rel="nofollow" href="https://templatemo.com" target="_parent">TemplateMo</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+    @Scripts.Render("~/Scripts/Home/vendor/jquery.min.js")
+    @Scripts.Render("~/Scripts/Home/vendor/bootstrap.bundle.min.js")
+
+    @Scripts.Render("~/Scripts/Home/js/custom.js")
+    @Scripts.Render("~/Scripts/Home/js/owl.js")
+    @Scripts.Render("~/Scripts/Home/js/slick.js")
+    @Scripts.Render("~/Scripts/Home/js/isotope.js")
+    @Scripts.Render("~/Scripts/Home/js/accordions.js")    
+    @RenderSection("scripts", required: false)
+
+    <!-- Additional Scripts -->
+
+</body>
+</html>

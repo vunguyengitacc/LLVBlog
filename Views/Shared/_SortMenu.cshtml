@@ -1,0 +1,42 @@
+﻿<div class="sidebar-item categories">
+    <div class="sidebar-heading">
+        <h2>Sắp xếp</h2>
+    </div>
+    <div class="content">
+        <ul>
+            @if (ViewBag.SortType == 1)
+            {
+                <li><a class="active-link" href="/Blog/Index?page=1&sort=1&q=@Request.QueryString["q"]&category=@Request.QueryString["category"]">Theo ngày đăng</a></li>
+            }
+            else
+            {
+                <li><a href="/Blog/Index?page=1&sort=1&q=@Request.QueryString["q"]&category=@Request.QueryString["category"]">Theo ngày đăng</a></li>
+            }
+            @if (ViewBag.SortType == 2)
+            {
+                <li><a class="active-link" href="/Blog/Index?page=1&sort=2&q=@Request.QueryString["q"]&category=@Request.QueryString["category"]">Theo tiêu đề</a></li>
+            }
+            else
+            {
+                <li><a href="/Blog/Index?page=1&sort=2&q=@Request.QueryString["q"]&category=@Request.QueryString["category"]">Theo tiêu đề</a></li>
+            }
+            @if (ViewBag.SortType == 3)
+            {
+                <li><a class="active-link" href="/Blog/Index?page=1&sort=3&q=@Request.QueryString["q"]&category=@Request.QueryString["category"]">Theo số lượt xem</a></li>
+            }
+            else
+            {
+                <li><a href="/Blog/Index?page=1&sort=3&q=@Request.QueryString["q"]&category=@Request.QueryString["category"]">Theo số lượt xem</a></li>
+            }
+            @if (ViewBag.SortType == 4)
+            {
+                <li><a class="active-link" href="/Blog/Index?page=1&sort=4&q=@Request.QueryString["q"]&category=@Request.QueryString["category"]">Theo điểm đánh giá</a></li>
+            }
+            else
+            {
+                <li><a href="/Blog/Index?page=1&sort=4&q=@Request.QueryString["q"]&category=@Request.QueryString["category"]">Theo đánh giá</a></li>
+            }        
+        
+        </ul>
+    </div>
+</div>

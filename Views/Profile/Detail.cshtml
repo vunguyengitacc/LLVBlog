@@ -1,0 +1,97 @@
+﻿@model LLVBog.Models.Account
+
+@{
+    ViewBag.Page = "Profile";
+    Layout = "~/Views/Shared/_HomeLayout.cshtml";
+}
+
+
+<!-- Page Content -->
+<!-- Banner Starts Here -->
+<div class="heading-page header-text">
+    <section class="page-heading">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="text-content">
+                        <h4>Trang cá nhân</h4>
+                        <h2>Vu Nguyen</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+<!-- Banner Ends Here -->
+
+<section class="blog-posts">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="all-blog-posts">
+                    <div class="row">
+                        <div class="sidebar-heading">
+                            <h2 class=" main-content-heading">thông tin cá nhân</h2>
+                        </div>
+                        <div class="col-lg-12">
+                            @using (Html.BeginForm("Detail", "Profile", FormMethod.Post, new { @class = "form-profile" }))
+                            {
+                                @Html.AntiForgeryToken()
+                                <ul>
+                                    <li>
+                                        @Html.LabelFor(m => m.Username)
+                                        @Html.TextBoxFor(m => m.Username, new { @readonly = "readonly" })
+                                    </li>
+                                    <li>
+                                        @Html.LabelFor(m => m.FirstName)
+                                        @Html.TextBoxFor(m => m.FirstName)
+                                        @Html.ValidationMessageFor(m => m.FirstName, "", new { @class = "message" })
+                                    </li>
+                                    <li>
+                                        @Html.LabelFor(m => m.LastName)
+                                        @Html.TextBoxFor(m => m.LastName)
+                                        @Html.ValidationMessageFor(m => m.LastName, "", new { @class = "message" })
+                                    </li>
+                                    <li>
+                                        @Html.LabelFor(m => m.Gmail)
+                                        @Html.TextBoxFor(m => m.Gmail)
+                                        @Html.ValidationMessageFor(m => m.Gmail, "", new { @class = "message"})
+                                    </li>
+                                    <li>
+                                        <input type="submit" value="Cập nhật" />
+                                    </li>
+                                </ul>
+
+                            }
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="sidebar">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="sidebar-item recent-posts">
+                                <div class="sidebar-heading">
+                                    <h2 class="text-title">Tác vụ</h2>
+                                </div>
+                                <div class="content">
+                                    <div class="content-item"><a href="#">Đăng bài</a></div>
+                                    <div class="content-item"><a href="#">Thông tin tài khoản</a></div>
+                                    <div class="content-item"><a href="ChangePass">Đổi mật khẩu</a></div>
+                                    <div class="content-item"><a href="/Login/Logout">Đăng xuất</a></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

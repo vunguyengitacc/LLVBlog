@@ -1,0 +1,42 @@
+﻿@model LLVBog.Models.ResetPasswordModel
+
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width" />
+    <title>Login1</title>
+    <link rel="stylesheet" href="~/Content/Login/Style-ResetPass.css">
+</head>
+<body>
+    <!-- partial:index.partial.html -->
+    <div class="login-reg-panel">
+
+        <div class="register-info-box">
+            <h2>Tạo lại mật khẩu</h2>
+            <p>Nhập vào mật khẩu để đổi lại mật khẩu của bạn.</p>
+        </div>
+
+        <div class="white-panel">
+            <form name="fForgotPass" onsubmit="return validateForm()" action="/Login/ResetPass" method="post" class="login-show">
+                @Html.AntiForgeryToken()
+                <h2>TẠO LẠI MẬT KHẨU</h2>
+                <label style="color:red">@ViewBag.Message</label>
+                <input id="NewPassword" name="NewPassword" type="password" placeholder="Mật khẩu">
+                <input id="ConfirmPassword" name="ConfirmPassword" type="password" placeholder="Xác nhận mật khẩu">
+                @Html.HiddenFor(a => a.ResetCode)
+                <input type="submit" name="submit" value="Đổi mật khẩu">
+            </form>
+
+        </div>
+    </div>
+    <!-- partial -->
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
+    <script src="~/Scripts/Login/script_ResetPass.js"></script>
+
+</body>
+</html>

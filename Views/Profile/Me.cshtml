@@ -1,0 +1,149 @@
+﻿@model LLVBog.Models.Account
+
+@{
+    ViewBag.Page = "Me";
+    Layout = "~/Views/Shared/_HomeLayout.cshtml";
+}
+
+<div class="heading-page header-text">
+    <section class="page-heading">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="text-content">
+                        <h4>Trang cá nhân</h4>
+                        <h2>@Model.FirstName @Model.LastName</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+<!-- Banner Ends Here -->
+
+<section class="blog-posts">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="all-blog-posts">
+                    <div class="row">
+                        <div class="sidebar-heading">
+                            <h2 class=" main-content-heading">Bài viết của @Model.LastName</h2>
+                        </div>
+                        @foreach (var item in Model.Blogs)
+                        {
+                            <div class="col-lg-12">
+                                <div class="blog-post row custom-shadow">
+                                    <div class="down-content col-lg-12">
+                                        <div class="post-options">
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <ul class="post-tags">
+                                                        <li><i class="fa fa-tags"></i></li>
+                                                        @if (item.Categories.Count > 5)
+                                                        {
+                                                            foreach (var i in item.Categories.Take(5))
+                                                            {
+                                                                <li><a href="#">@i.Name</a></li>
+                                                            }
+                                                            <li><a href="#">...</a></li>
+                                                        }
+                                                        else
+                                                        {
+                                                            foreach (var i in item.Categories)
+                                                            {
+                                                                <li><a href="#">@i.Name</a></li>
+                                                            }
+                                                        }
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <a href="/Blog/Content/@item.BlogId">
+                                            <h4 class="post-title">
+                                                @item.Title
+                                            </h4>
+                                        </a>
+                                        <ul class="post-info">
+                                            <li><a href="#">@item.CreatedDate.ToString("d")</a></li>
+                                            <li><a href="#">@item.TotalView Lượt xem</a></li>
+                                        </ul>
+                                        <div class="flex margin-top">
+                                            @{
+                                                var vote = item.Actions.Where(i => i.Vote == true).Count() - item.Actions.Where(i => i.Vote == false).Count();
+                                                var voteString = vote.ToString();
+                                            }
+                                            <div class="flex-column flex">
+                                                @if (vote > 0)
+                                                {
+                                                    voteString = "+" + vote;
+                                                    <span class="fa fa-chevron-up vote-valid"></span>
+                                                    <span class="fa fa-chevron-down vote"></span>
+                                                }
+                                                else if (vote < 0)
+                                                {
+                                                    <span class="fa fa-chevron-up vote"></span>
+                                                    <span class="fa fa-chevron-down vote-valid"></span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="fa fa-chevron-up vote"></span>
+                                                    <span class="fa fa-chevron-down vote"></span>
+                                                }
+                                            </div>
+                                            &ensp;&ensp;@voteString
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+
+
+                        <div class="col-lg-12 padding-zero">
+                            <div class="main-button">
+                                <a href="#">Xem tất cả các bài đăng</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="sidebar">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="sidebar-item recent-posts">
+                                <div class="sidebar-heading">
+                                    <h2 class="text-title">Tác vụ</h2>
+                                </div>
+
+                                <div class="content">
+                                    <div class="content-item"><a href="#">Đăng bài</a></div>
+                                    <div class="content-item"><a href="Detail">Thông tin tài khoản</a></div>
+                                    <div class="content-item"><a href="ChangePass">Đổi mật khẩu</a></div>
+                                    <div class="content-item"><a href="/Login/Logout">Đăng xuất</a></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-12">
+                            <div class="sidebar-item tags">
+                                <div class="sidebar-heading">
+                                    <h2 class="text-title">Đã chia sẻ về</h2>
+                                </div>
+                                <div class="content">
+                                    <ul>
+                                        @foreach (var item in ViewBag.ListCategory)
+                                        {
+                                            <li><a href="#">@item</a></li>
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+

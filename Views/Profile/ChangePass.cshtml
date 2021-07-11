@@ -1,0 +1,92 @@
+﻿@model LLVBog.Models.ChangePassword
+@{
+    ViewBag.Page = "ChangePass";
+    Layout = "~/Views/Shared/_HomeLayout.cshtml";
+}
+
+
+<!-- Page Content -->
+<!-- Banner Starts Here -->
+<div class="heading-page header-text">
+    <section class="page-heading">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="text-content">
+                        <h4>Trang cá nhân</h4>
+                        <h2></h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+<!-- Banner Ends Here -->
+
+<section class="blog-posts">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="all-blog-posts">
+                    <div class="row">
+
+                        <div class="sidebar-heading">
+                            <h2 class=" main-content-heading">đổi mật khẩu</h2>
+                        </div>
+                        <div class="col-lg-12">
+                            @using (Html.BeginForm("ChangePass", "Profile", FormMethod.Post, new { @class = "form-profile" }))
+                            {
+                                @Html.AntiForgeryToken()                                
+                            <ul>
+                                <li>
+                                    @Html.LabelFor(m=>m.oldPassword)
+                                    @Html.PasswordFor(m => m.oldPassword)
+                                    @Html.ValidationMessageFor( m => m.oldPassword , "", new { @class = "message" })
+                                </li>
+                                <li>
+                                    @Html.LabelFor(m=>m.newPassword)
+                                    @Html.PasswordFor(m => m.newPassword)
+                                    @Html.ValidationMessageFor(m=>m.newPassword, "", new { @class = "message" })
+                                </li>
+                                <li>
+                                    @Html.LabelFor(m=>m.confirmPassword)
+                                    @Html.PasswordFor(m => m.confirmPassword)
+                                    @Html.ValidationMessageFor(m=>m.confirmPassword, "", new { @class = "message" })
+                                </li>
+                                <li>
+                                    <input type="submit" value="Cập nhật">
+                                </li>
+                            </ul>
+
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="sidebar">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="sidebar-item recent-posts">
+                                <div class="sidebar-heading">
+                                    <h2 class="text-title">Tác vụ</h2>
+                                </div>
+                                <div class="content">
+                                    <div class="content-item"><a href="#">Đăng bài</a></div>
+                                    <div class="content-item"><a href="Detail">Thông tin tài khoản</a></div>
+                                    <div class="content-item"><a href="#">Đổi mật khẩu</a></div>
+                                    <div class="content-item"><a href="/Login/Logout">Đăng xuất</a></div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
