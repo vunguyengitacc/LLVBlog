@@ -31,10 +31,10 @@
         </div>
 
         <div class="white-panel">
-            <form name="fLogin" onsubmit="return validateForm()" action="/Login/Login" method="post" class="login-show">
+            <form name="fLogin" id="fLogin" onsubmit="return validateForm()" action="/Login/Login" method="post" class="login-show">
                 @Html.AntiForgeryToken()
                 <h2>ĐĂNG NHẬP</h2>
-                <label style="color:red">@ViewBag.Message</label>
+                <label style="color:red" id="Validate">@ViewBag.Message</label>
                 <input id="Username" name="Username" type="text" placeholder="Tên đăng nhập/Email">
                 <input id="Password" name="Password" type="password" placeholder="Mật khẩu">
                 <input type="submit" name="submit" value="Đăng nhập">

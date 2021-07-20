@@ -34,7 +34,11 @@
                         {
                             <div class="col-lg-12">
                                 <div class="blog-post row custom-shadow">
-                                    <div class="down-content col-lg-12">
+                                    <div class="col-lg-4" style="padding: 0">
+                                        <img src="~/Content/Home/images/heading-bg.jpg" style="width: 100% ; height: 100%;">
+
+                                    </div>
+                                    <div class="down-content col-lg-8">
                                         <div class="post-options">
                                             <div class="row">
                                                 <div class="col-lg-12">
@@ -59,7 +63,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <a href="/Blog/Content/@item.BlogId">
+                                        <a href="/Profile/Edit/@item.BlogId">
                                             <h4 class="post-title">
                                                 @item.Title
                                             </h4>
@@ -99,10 +103,34 @@
                         }
 
 
-                        <div class="col-lg-12 padding-zero">
-                            <div class="main-button">
-                                <a href="#">Xem tất cả các bài đăng</a>
-                            </div>
+                        <div class="col-lg-12">
+                            <ul class="page-numbers">
+                                <li><a href="/Profile/Me?page=1"><i class="fa fa-angle-double-left"></i></a></li>
+                                @for (var i = ViewBag.PageID - 2; i < ViewBag.PageID; i++)
+                                {
+                                    if (i <= 0)
+                                    {
+                                        continue;
+                                    }
+                                    if (i == ViewBag.PageID - 2)
+                                    {
+                                        <li><a href="#">...</a></li>
+                                    }
+                                    <li><a href="/Profile/Me?page=@i">@i</a></li>
+
+                                }
+                                <li class="active"><a href="#">@ViewBag.PageID</a></li>
+                                @for (var i = ViewBag.PageID + 1; i <= ViewBag.PageMax && i <= ViewBag.PageID + 3; ++i)
+                                {
+                                    if (i == ViewBag.PageId + 3)
+                                    {
+                                        <li><a href="#">...</a></li>
+                                        break;
+                                    }
+                                    <li><a href="/Profile/Me?page=@i">@i</a></li>
+                                }
+                                <li><a href="/Profile/Me?page=@ViewBag.PageMax"><i class="fa fa-angle-double-right"></i></a></li>
+                            </ul>
                         </div>
                     </div>
                 </div>
@@ -117,7 +145,7 @@
                                 </div>
 
                                 <div class="content">
-                                    <div class="content-item"><a href="#">Đăng bài</a></div>
+                                    <div class="content-item"><a href="CreateNew">Đăng bài</a></div>
                                     <div class="content-item"><a href="Detail">Thông tin tài khoản</a></div>
                                     <div class="content-item"><a href="ChangePass">Đổi mật khẩu</a></div>
                                     <div class="content-item"><a href="/Login/Logout">Đăng xuất</a></div>

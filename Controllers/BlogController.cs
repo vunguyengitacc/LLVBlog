@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using LLVBog.Models;
-
+using PagedList;
 
 namespace LLVBog.Controllers
 {
@@ -45,8 +45,7 @@ namespace LLVBog.Controllers
                     {
                         action = new LLVBog.Models.Action() { Username = acc, BlogId = blog.BlogId, View = 0 };
                         db.Actions.Add(action);
-                    }
-                    blog.TotalView++;
+                    }                    
                     action.View++;
                     db.SaveChanges();
                 }
@@ -64,6 +63,13 @@ namespace LLVBog.Controllers
 
         public ActionResult Content(int? id)
         {
+            if (Session["Username"] != null)
+            {
+                string username = Session["Username"].ToString();
+                ViewBag.UserAction = db.Actions.FirstOrDefault(item => item.BlogId == id && item.Username == username);
+            }
+                
+
             if (id == 0 || id == null)
                 return View("Error");
             Blog post = db.Blogs.Where(i => i.BlogId == id).FirstOrDefault();
@@ -104,33 +110,19 @@ namespace LLVBog.Controllers
             if (category != 0)
                 lstPost = lstPost.Where(i => i.Categories.Where(si => si.CategoryId == category).Count() > 0).ToList();
 
-            //Phân trang
-            int amount = lstPost.Count();
-            int pageMax = amount % 8 == 0 ? amount / 8 : amount / 8 + 1; // lấy stt trang lớn nhất
-            if (page > pageMax)
-                page = pageMax; //nếu parameter page > stt lớn nhất => gán page = trang lớn nhất
-            lstPost = lstPost.Skip(8 * ((int)page - 1)).Take(8).ToList();
-
             // lấy danh sách các bài đăng được nhiều lượt xem nhất để làm chức năng gợi ý
-            List<Blog> lstHotPosts = db.Blogs.OrderByDescending(i => i.TotalView).ToList();
+            List<Blog> lstHotPosts = db.Blogs.OrderByDescending(i => i.TotalView).Take(4).ToList();
 
             //Lấy danh sách các thể loại
             ViewBag.lstCatgories = db.Categories.OrderByDescending(i => i.Blogs.Count).Take(10).ToList();
 
-            //Loại trừ các bài đăng đang hiển thị khỏi danh sách các bài đăng nổi bật nhằm tránh trùng lặp giữa 2 danh sách
-            lstPost.ForEach(i =>
-            {
-                lstHotPosts.Remove(i);
-            });
-
-            //Các biến dùng cho việc hiển thị giao diện
-            ViewBag.PageMax = pageMax;
-            ViewBag.PageID = (int)page;
+            
             ViewBag.SortType = (int)sort;
             ViewBag.lstHotPosts = lstHotPosts;
+            ViewBag.Category = category;
+            int pageNumber = (page ?? 1);
 
-
-            return View(lstPost);
+            return View(lstPost.ToPagedList(pageNumber, 4));
         }
     }
 

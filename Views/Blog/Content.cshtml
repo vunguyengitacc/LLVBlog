@@ -1,10 +1,12 @@
 ﻿@model LLVBog.Models.Blog
-
+@using LLVBog.Models
 @{
     ViewBag.Page = "Blog";
     Layout = "~/Views/Shared/_HomeLayout.cshtml";
 }
 
+<div id="fb-root"></div>
+<script async defer crossorigin="anonymous" src="https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v11.0" nonce="j9dg0ybm"></script>
 <div class="heading-page header-text">
     <section class="page-heading">
         <div class="container">
@@ -24,11 +26,11 @@
         <div class="row">
             <div class="col-lg-1 col-sm-12 post-value sticky">
                 <div class="post-status sticky">
-                    <div class="margin-bottom">                        
+                    <div class="margin-bottom">
                         <a href="/Profile/Author?username=@Model.Account.Username">
                             @Model.Account.FirstName @Model.Account.LastName
                         </a>
-                        
+
                     </div>
                     <div class="margin-bottom">
                         <span class="fa fa-eye">&ensp;@Model.TotalView</span>
@@ -37,9 +39,28 @@
                         @{
                             var vote = Model.Actions.Where(item => item.Vote == true).Count() - Model.Actions.Where(item => item.Vote == false).Count();
                         }
-                        <span class="fa fa-chevron-up vote"></span>
-                        <h5>@vote</h5>
-                        <span class="fa fa-chevron-down vote"></span>
+                        @if (ViewBag.UserAction != null && ViewBag.UserAction.Vote != null)
+                        {
+                            if (ViewBag.UserAction.Vote == true)
+                            {
+                                <span class="fa fa-chevron-up vote-valid" id="vote-up" onclick="toggleVoteUp()"></span>
+                                <h5 id="vote-display">@vote</h5>
+                                <span class="fa fa-chevron-down vote" id="vote-down" onclick="toggleVoteDown()"></span>
+                            }
+                            else
+                            {
+                                <span class="fa fa-chevron-up vote" id="vote-up" onclick="toggleVoteUp()"></span>
+                                <h5 id="vote-display">@vote</h5>
+                                <span class="fa fa-chevron-down vote-valid" id="vote-down" onclick="toggleVoteDown()"></span>
+                            }
+                        }
+                        else
+                        {
+                            <span class="fa fa-chevron-up vote" id="vote-up" onclick="toggleVoteUp()"></span>
+                            <h5 id="vote-display">@vote</h5>
+                            <span class="fa fa-chevron-down vote" id="vote-down" onclick="toggleVoteDown()"></span>
+                        }
+
                     </div>
                 </div>
 
@@ -143,6 +164,7 @@
         </div>
     </div>
 </section>
+<div class="container"><div class="fb-comments" data-href="https://www.lvlblog.com/BLog/Content/@Model.BlogId" data-width="100%" data-numposts="5"></div></div>
 
 @section scripts{
     <script>
@@ -153,11 +175,11 @@
             let menuNode = document.getElementById("post-menu");
             if (Object.values(lstHeading).length == 0) {
                 element.style.marginBottom = "1vh"
-                element.setAttribute("id", "heading-" + index);
+                element.setAttribute("id", "heading-");
                 let node = document.createElement("div");
                 node.setAttribute("class", "content-item");
                 let anchor = document.createElement("a");
-                anchor.innerHTML = "Không có mục lục để hiển thị";
+                anchor.innerHTML = "Không có mục lục";
                 anchor.style.color = "#E2DEDD";
                 anchor.style.lineHeight = "3rem";
                 anchor.style.height = "3rem";
@@ -222,10 +244,81 @@
                 error: (xhr) => {
                     //debugger;
                     console.log(xhr.responseText);
-                    alert("Error has occurred..");
+                    alert("Đã xảy ra lỗi");
                 }
             });
         }, countTimeToRead(blogContent));
 
+
+        const toggleVoteUp = () => {
+            console.log("vote")
+            $.ajax({
+                type: "POST",
+                url: '/Action/ToggleVoteUp?blogId=@Model.BlogId',
+                success: (response) => {
+                    if (!response.result) {
+                        if (response.type == 1) {
+                            alert("Bạn phải đăng nhập để thực hiện chức năng này")
+                        }
+                        if (response.type == 2) {
+                            alert("Sai thông tin")
+                        }
+                    }
+                    else {                        
+                        document.getElementById("vote-display").innerHTML = response.vote;                        
+                        let voteEle = document.getElementById("vote-up");
+                        if ($(voteEle).hasClass("vote-valid")) {
+                            $(voteEle).removeClass("vote-valid").addClass("vote");
+                        }
+                        else 
+                            $(voteEle).removeClass("vote").addClass("vote-valid");
+                        let voteDownEle = document.getElementById("vote-down");
+                        if ($(voteDownEle).hasClass("vote-valid")) {
+                            $(voteDownEle).removeClass("vote-valid").addClass("vote")
+                        }
+                    }
+                },
+                error: (xhr) => {
+                    //debugger;
+                    console.log(xhr.responseText);
+                    alert("Đã xảy ra lỗi");
+                }
+            });
+        }
+
+        const toggleVoteDown = () => {
+            $.ajax({
+                type: "POST",
+                url: '/Action/ToggleVoteDown?blogId=@Model.BlogId',
+                success: (response) => {
+                    if (!response.result) {
+                        if (response.type == 1) {
+                            alert("Bạn phải đăng nhập để thực hiện chức năng này")
+                        }
+                        if (response.type == 2) {
+                            alert("Sai thông tin")
+                        }
+                    }
+                    else {                        
+                        document.getElementById("vote-display").innerHTML = response.vote;
+                        let voteEle = document.getElementById("vote-down");
+                        if ($(voteEle).hasClass("vote-valid")) {
+                            $(voteEle).removeClass("vote-valid").addClass("vote");
+                        }
+                        else
+                            $(voteEle).removeClass("vote").addClass("vote-valid");
+                        let voteUpEle = document.getElementById("vote-up");
+                        if ($(voteUpEle).hasClass("vote-valid")) {
+                            $(voteUpEle).removeClass("vote-valid").addClass("vote")
+                        }
+                    }                        
+                },
+                error: (xhr) => {
+                    //debugger;
+                    console.log(xhr.responseText);
+                    alert("Đã xảy ra lỗi");
+                }
+            });
+        }
     </script>
 }

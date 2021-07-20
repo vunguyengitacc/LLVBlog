@@ -81,3 +81,13 @@ C:\Users\AnhVu\Desktop\LLVBog\obj\Debug\LLVBlog.csproj.CoreCompileInputs.cache
 C:\Users\AnhVu\Desktop\LLVBog\obj\Debug\LLVBlog.csproj.CopyComplete
 C:\Users\AnhVu\Desktop\LLVBog\obj\Debug\LLVBog.dll
 C:\Users\AnhVu\Desktop\LLVBog\obj\Debug\LLVBog.pdb
+C:\Users\AnhVu\Desktop\LLVBog\bin\PagedList.dll
+C:\Users\AnhVu\Desktop\LLVBog\bin\PagedList.Mvc.dll
+C:\Users\AnhVu\Desktop\LLVBog\bin\PagedList.xml
+C:\Users\AnhVu\Desktop\LLVBog\bin\PagedList.Mvc.xml
+C:\Users\AnhVu\Desktop\LLVBog\bin\System.Net.Http.Formatting.dll
+C:\Users\AnhVu\Desktop\LLVBog\bin\System.Web.Http.dll
+C:\Users\AnhVu\Desktop\LLVBog\bin\System.Web.Http.WebHost.dll
+C:\Users\AnhVu\Desktop\LLVBog\bin\System.Net.Http.Formatting.xml
+C:\Users\AnhVu\Desktop\LLVBog\bin\System.Web.Http.xml
+C:\Users\AnhVu\Desktop\LLVBog\bin\System.Web.Http.WebHost.xml
