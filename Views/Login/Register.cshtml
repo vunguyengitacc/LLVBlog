@@ -6,41 +6,38 @@
 
 <!DOCTYPE html>
 <html>
-<head>
 
-    <title>Đăng nhập</title>
+<head>
+    <title>Đăng ký</title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="keywords" content="Existing Login Form Widget Responsive, Login Form Web Template, Flat Pricing Tables, Flat Drop-Downs, Sign-Up Web Templates, Flat Web Templates, Login Sign-up Responsive Web Template, Smartphone Compatible Web Template, Free Web Designs for Nokia, Samsung, LG, Sony Ericsson, Motorola Web Design">
 
-    <link rel="stylesheet" href="~/Content/Login/styleLogin.css">
+    <link rel="stylesheet" href="~/Content/Login/styleRegister.css">
 
     <link href="//fonts.googleapis.com/css?family=Quicksand:300,400,500,700" rel="stylesheet">
 </head>
 
 <body>
     <div class="w3layoutscontaineragileits">
-        <h2>Đăng nhập</h2>
-        @using (Html.BeginForm("Login", "Login", FormMethod.Post))
-        {
-
+        <h2>Đăng ký</h2>
+        <label>@ViewBag.Message</label>
+        <form name="fRegister" onsubmit="return validateRForm()" action="/Login/Register" method="post">
             @Html.AntiForgeryToken()
-            <label>@ViewBag.Message</label>
-            <input id="Username" name="Username" type="text" placeholder="Tên đăng nhập/Email">
+            <input id="LastName" name="LastName" type="text" placeholder="Họ">
+            <input id="FirstName" name="FirstName" type="text" placeholder="Tên">
+            <input id="Username" name="Username" type="text" placeholder="Tên đăng nhập">
+            <input id="Gmail" name="Gmail" type="email" placeholder="Email">
             <input id="Password" name="Password" type="password" placeholder="Mật khẩu">
-            <ul class="agileinfotickwthree">
-                <li>
-                    <a href="/Login/SendResetPassEmail">Quên mật khẩu ?</a>
-                </li>
-            </ul>
+            <input name="Repeat_Pass" type="password" placeholder="Xác nhận mật khẩu">
+
             <div class="aitssendbuttonw3ls">
-                <input type="submit" value="Đăng nhập">
-                <p><a class="w3_play_icon1" href="/Login/Register"> Tạo tài khoản?</a></p>
-                <p><a class="w3_play_icon1" href="/Home"> Về trang chủ</a></p>
+                <input type="submit" value="Đăng ký">
+                <p><a class="w3_play_icon1" href="/Login/Login"> Đã có tài khoản? </a></p>
                 <div class="clear"></div>
             </div>
-        }
+        </form>
     </div>
     <script src="~/Scripts/Login/script1.js"></script>
 </body>

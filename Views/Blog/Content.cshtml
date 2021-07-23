@@ -24,7 +24,7 @@
 <section class="blog-contents">
     <div class="container">
         <div class="row">
-            <div class="col-lg-1 col-sm-12 post-value sticky">
+            <div class="col-lg-1 col-sm-12 post-value">
                 <div class="post-status sticky">
                     <div class="margin-bottom">
                         <a href="/Profile/Author?username=@Model.Account.Username">
@@ -67,7 +67,7 @@
 
             </div>
 
-            <div class="col-lg-8 col-sm-12">
+            <div class="col-lg-8 col-sm-12 custom-content">
                 <div class="all-blog-posts">
                     <div class="row">
                         <div class="col-lg-12" id="blog-content" style="min-height: 40vh">
@@ -83,7 +83,7 @@
                 <div class="sidebar" style="float: left; margin-left: 0 !important; width: 100%">
                     <div class="row">
                         <div class="col-lg-12 sidebar-content">
-                            <div class="sidebar-item recent-posts sticky" style="width: 100%">
+                            <div class="sidebar-item recent-posts sticky" style="width: 100%; margin-top: 5vh!important">
                                 <div class="sidebar-heading">
                                     <h2 class="text-title">Mục lục</h2>
                                 </div>
@@ -116,7 +116,7 @@
                     <div class="all-blog-posts">
                         <div class="row">
                             <div class="col-lg-12">
-                                <div class="blog-post row">
+                                <div class="blog-post custom-shadow row">
                                     <div class="down-content col-lg-12">
                                         <div class="post-options">
                                             <div class="row">
@@ -149,8 +149,7 @@
                                         </a>
                                         <ul class="post-info">
                                             <li><a href="/Profile/Author?username=@item.Account.Username">@item.Account.FirstName @item.Account.LastName</a></li>
-                                            <li><a href="#">@item.CreatedDate</a></li>
-                                            <li><a href="#">@item.Comments.Count Bình luận</a></li>
+                                            <li><a href="#">@item.CreatedDate</a></li>                                            
                                         </ul>
                                     </div>
                                 </div>
@@ -164,6 +163,19 @@
         </div>
     </div>
 </section>
+@if (ViewBag.IsAdminSession != null && ViewBag.IsAdminSession == true)
+{
+    <a href="#" onclick="toggleBlock()" class="float">
+        <i class="fa fa-close my-float"></i>
+    </a>
+}
+else
+{
+    <a href="#" onclick="report()" class="float">
+        <i class="fa fa-exclamation-triangle my-float"></i>
+    </a>
+
+}
 <div class="container"><div class="fb-comments" data-href="https://www.lvlblog.com/BLog/Content/@Model.BlogId" data-width="100%" data-numposts="5"></div></div>
 
 @section scripts{
@@ -194,7 +206,10 @@
                     node.setAttribute("class", "content-item");
                     let anchor = document.createElement("a");
                     anchor.setAttribute("href", "#heading-" + index);
-                    anchor.innerHTML = element.outerText;
+                    if (element.outerText.length > 20)
+                        anchor.innerHTML = element.outerText.slice(0, 20) + '...';
+                    else
+                        anchor.innerHTML = element.outerText.slice(0, 20);
                     anchor.style.lineHeight = "3rem";
                     anchor.style.height = "3rem";
                     node.appendChild(anchor);
@@ -264,13 +279,13 @@
                             alert("Sai thông tin")
                         }
                     }
-                    else {                        
-                        document.getElementById("vote-display").innerHTML = response.vote;                        
+                    else {
+                        document.getElementById("vote-display").innerHTML = response.vote;
                         let voteEle = document.getElementById("vote-up");
                         if ($(voteEle).hasClass("vote-valid")) {
                             $(voteEle).removeClass("vote-valid").addClass("vote");
                         }
-                        else 
+                        else
                             $(voteEle).removeClass("vote").addClass("vote-valid");
                         let voteDownEle = document.getElementById("vote-down");
                         if ($(voteDownEle).hasClass("vote-valid")) {
@@ -299,7 +314,7 @@
                             alert("Sai thông tin")
                         }
                     }
-                    else {                        
+                    else {
                         document.getElementById("vote-display").innerHTML = response.vote;
                         let voteEle = document.getElementById("vote-down");
                         if ($(voteEle).hasClass("vote-valid")) {
@@ -311,7 +326,7 @@
                         if ($(voteUpEle).hasClass("vote-valid")) {
                             $(voteUpEle).removeClass("vote-valid").addClass("vote")
                         }
-                    }                        
+                    }
                 },
                 error: (xhr) => {
                     //debugger;
@@ -320,5 +335,55 @@
                 }
             });
         }
+
+        const report = () => {
+            $.ajax({
+                type: "POST",
+                url: '/Action/Report?blogId=@Model.BlogId',
+                success: (response) => {
+                    if (!response.result) {
+                        if (response.type == 1) {
+                            alert("Bạn phải đăng nhập để thực hiện chức năng này")
+                        }
+                        if (response.type == 2) {
+                            alert("Sai thông tin")
+                        }
+                    }
+                    else alert("Bạn đã báo cáo bài viết này với admin!")
+
+                },
+                error: (xhr) => {
+                    //debugger;
+                    console.log(xhr.responseText);
+                    alert("Đã xảy ra lỗi");
+                }
+            });
+        }
+
+        const toggleBlock = () => {
+            $.ajax({
+                type: "POST",
+                url: '/Action/ToggleBlock?blogId=@Model.BlogId',
+                success: (response) => {
+                    if (!response.result) {
+                        if (response.type == 1) {
+                            alert("Bạn phải đăng nhập để thực hiện chức năng này")
+                        }
+                        if (response.type == 2) {
+                            alert("Sai thông tin")
+                        }
+                    }
+                    else if (response.type == 3) alert("Bạn đã mở khóa cho bài viết này")
+                    else if (response.type == 4) alert("Bạn đã khóa bài viết này")
+
+                },
+                error: (xhr) => {
+                    //debugger;
+                    console.log(xhr.responseText);
+                    alert("Đã xảy ra lỗi");
+                }
+            });
+        }
+
     </script>
 }

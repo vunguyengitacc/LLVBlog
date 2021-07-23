@@ -12,20 +12,23 @@ namespace LLVBog.Models
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+
     public partial class Account
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Account()
         {
             this.Blogs = new HashSet<Blog>();
-            this.Comments = new HashSet<Comment>();
             this.Actions = new HashSet<Action>();
         }
-        
+
+        [Display(Name = "Tên đăng nhập")]
         public string Username { get; set; }
-        
+        [Display(Name = "Mật khẩu")]
         public string Password { get; set; }
+        [Display(Name = "Họ")]
         public string FirstName { get; set; }
+        [Display(Name = "Tên")]
         public string LastName { get; set; }
         public System.DateTime CreatedDate { get; set; }
         public string Gmail { get; set; }
@@ -34,8 +37,6 @@ namespace LLVBog.Models
         public virtual Role Role { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Blog> Blogs { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Comment> Comments { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Action> Actions { get; set; }
     }

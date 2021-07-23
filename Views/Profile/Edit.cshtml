@@ -32,14 +32,16 @@
                     <div class="row">
 
                         <div class="sidebar-heading">
-                            <h2 class=" main-content-heading">đăng bài</h2>
+                            <h2 class=" main-content-heading">cập nhật bài viết</h2>
                         </div>
-                        <div class="col-lg-12">
+                        <div class="col-lg-12 form">
                             @Html.LabelFor(m => m.Title)
                             @Html.TextBoxFor(m => m.Title)
-                            @Html.ValidationMessageFor(m => m.Title)
 
-                            @Html.LabelFor(m=>m.Categories)
+                            @Html.LabelFor(m => m.ImageUrl)
+                            @Html.TextBoxFor(m => m.ImageUrl)
+
+                            @Html.LabelFor(m => m.Categories)
 
                             <div class="group-checkbox">
                                 @foreach (var item in Model.Categories)
@@ -57,12 +59,13 @@
 
                                 }
                             </div>
-                            
+
 
                             <textarea name="editor1" id="editor1">
                                 @Html.Raw(HttpUtility.HtmlDecode(Model.Content))
                             </textarea>
-                            <button class="submit" onclick="submitHandler()">Lưu thay đổi</button>
+                            <button class="submit" onclick="submitEditHandler()">Lưu thay đổi</button>
+                            <button class="submit btn-delete" onclick="submitDeleteHandler()">Xóa bài viết</button>
                         </div>
                     </div>
                 </div>
@@ -76,6 +79,10 @@
                                     <h2 class="text-title">Tác vụ</h2>
                                 </div>
                                 <div class="content">
+                                    @if (ViewBag.IsAdmin != null && ViewBag.IsAdmin == true)
+                                    {
+                                        <div class="content-item"><a href="/Admin/Account">Tới trang quản trị</a></div>
+                                    }
                                     <div class="content-item"><a href="/Profile/CreateNew">Đăng bài</a></div>
                                     <div class="content-item"><a href="/Profile/Detail">Thông tin tài khoản</a></div>
                                     <div class="content-item"><a href="#">Đổi mật khẩu</a></div>
@@ -95,34 +102,54 @@
     @Scripts.Render("~/bundles/jqueryval")
 <script>
     CKEDITOR.replace("editor1");
-    
 
-    const submitHandler = () => {
-            var categories = document.getElementsByName("CategoryCheck");
-            var lstcategories = [];
-            var j = 0;
-            for (var i = 0; i < categories.length; i++) {
-                if ($(categories[i]).prop('checked') == true) {
-                    lstcategories[j++] =  $(categories[i]).val()
-                };
-            }
-            console.log(lstcategories)
-            let content = CKEDITOR.instances.editor1.getData();
-            let title = document.getElementById("Title");                
-            let blog = {Content: content, Title: title.value, ThisCategories: lstcategories };
-            console.log(blog)
-            $.ajax({
-                type: "POST",
-                data: JSON.stringify(blog),
-                url: "/Profile/Edit/@Model.Id",
-                contentType: "application/json"
+
+    const submitEditHandler = () => {
+        let categories = document.getElementsByName("CategoryCheck");
+        let lstcategories = [];
+        let j = 0;
+        for (var i = 0; i < categories.length; i++) {
+            if ($(categories[i]).prop('checked') == true) {
+                lstcategories[j++] =  $(categories[i]).val()
+            };
+        }
+
+        let content = CKEDITOR.instances.editor1.getData();
+        let title = document.getElementById("Title");
+        let imageUrl = document.getElementById("ImageUrl");
+        let blog = { Id: @Model.Id , Content: content, Title: title.value, ThisCategories: lstcategories, ImageUrl: imageUrl.value };
+        console.log(blog)
+        $.ajax({
+            type: "POST",
+            data: JSON.stringify(blog),
+            url: "/Profile/Edit/@Model.Id",
+            contentType: "application/json"
             })
                 .done((data) => {
                     if (data.result == true)
                         alert("Cập nhật thành công")
+                    else
+                        alert("Cập nhật thất bại")
                 })
                 .fail((error) => {
-                    alert("Cập nhật fail")
+                    alert("Đã xảy ra lỗi")
+                    console.log(error.responseText);
+                })
+    }
+
+    const submitDeleteHandler = () => {        
+        $.ajax({
+            type: "POST",            
+            url: "/Profile/Delete/@Model.Id",            
+            })
+                .done((data) => {
+                    if (data.result == true)
+                        alert("Xóa thành công! Bạn cũng như những người khác sẽ không thấy bài viết này nữa")
+                    else
+                        alert("Cập nhật thất bại")
+                })
+                .fail((error) => {
+                    alert("Đã xảy ra lỗi")
                     console.log(error.responseText);
                 })
     }

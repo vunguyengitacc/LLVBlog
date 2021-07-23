@@ -31,7 +31,6 @@ namespace LLVBog.Models
         public virtual DbSet<Action> Actions { get; set; }
         public virtual DbSet<Blog> Blogs { get; set; }
         public virtual DbSet<Category> Categories { get; set; }
-        public virtual DbSet<Comment> Comments { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
     }
 }

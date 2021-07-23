@@ -12,10 +12,9 @@
     <section class="page-heading">
         <div class="container">
             <div class="row">
-                <div class="col-lg-12">
+                <div class="col-lg-12"> 
                     <div class="text-content">
-                        <h4>Trang cá nhân</h4>
-                        <h2></h2>
+                        <h4>Trang cá nhân</h4>                        
                     </div>
                 </div>
             </div>
@@ -29,15 +28,17 @@
         <div class="row">
             <div class="col-lg-8">
                 <div class="all-blog-posts">
-                    <div class="row">
+                    <div class="row ">
 
                         <div class="sidebar-heading">
                             <h2 class=" main-content-heading">đăng bài</h2>
                         </div>
-                        <div class="col-lg-12">
+                        <div class="col-lg-12 form">
                             @Html.LabelFor(m => m.Title)
-                            @Html.TextBoxFor(m => m.Title)
-                            @Html.ValidationMessageFor(m => m.Title)
+                            @Html.TextBoxFor(m => m.Title)                            
+
+                            @Html.LabelFor(m=>m.ImageUrl)
+                            @Html.TextBoxFor(m=>m.ImageUrl)
 
                             @Html.LabelFor(m=>m.Categories)
                             <div class="group-checkbox">
@@ -48,7 +49,7 @@
                                 }
                             </div>
                             
-
+                            <label>Nội dung bài viết</label>
                             <textarea name="editor1" id="editor1"></textarea>
                             <button class="submit" onclick="submitHandler()">Tạo mới</button>
                         </div>
@@ -64,6 +65,10 @@
                                     <h2 class="text-title">Tác vụ</h2>
                                 </div>
                                 <div class="content">
+                                    @if (ViewBag.IsAdmin != null && ViewBag.IsAdmin == true)
+                                    {
+                                        <div class="content-item"><a href="/Admin/Account">Tới trang quản trị</a></div>
+                                    }
                                     <div class="content-item"><a href="CreateNew">Đăng bài</a></div>
                                     <div class="content-item"><a href="Detail">Thông tin tài khoản</a></div>
                                     <div class="content-item"><a href="#">Đổi mật khẩu</a></div>
@@ -78,7 +83,7 @@
         </div>
     </div>
 </section>
-
+<form action="/Profile/Me" id="comeback"></form>
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
     <script>
@@ -96,7 +101,8 @@
             console.log(lstcategories)
             var content = CKEDITOR.instances.editor1.getData();
             var title = document.getElementById("Title");
-            var blog = { Content: content, Title: title.value, ThisCategories: lstcategories };
+            var imageUrl = document.getElementById("ImageUrl");
+            var blog = { Content: content, Title: title.value, ThisCategories: lstcategories, ImageUrl: imageUrl.value };
             console.log(blog)
             $.ajax({
                 type: "POST",
@@ -107,6 +113,10 @@
                 .done((data) => {
                     if (data.result == true)
                         alert("Tạo thành công")
+                    setTimeout(() => {
+                        console.log("comeback");
+                        document.getElementById("comeback").submit();
+                    }, 2000 )
                 })
                 .fail((error) => {
                     console.log(error.responseText);

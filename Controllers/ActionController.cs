@@ -101,10 +101,40 @@ namespace LLVBog.Controllers
                 db.Actions.Add(action);
                 db.SaveChanges();
             }
-            if (action.Vote != true)
-                action.Vote = true;            
+            action.Report = true;            
             db.SaveChanges();
             return Json(new { result = true }, JsonRequestBehavior.AllowGet);
         }
+
+        [HttpPost]
+        public JsonResult ToggleBlock(int? blogId)
+        {
+            if (Session["Username"] == null)
+                return Json(new { result = false, type = 1 }, JsonRequestBehavior.AllowGet);
+            Blog tempBlog = db.Blogs.FirstOrDefault(item => item.BlogId == blogId);
+            if (tempBlog == null)
+                return Json(new { result = false, type = 2 }, JsonRequestBehavior.AllowGet);
+            string user = Session["Username"].ToString();
+            Account tempAcc = db.Accounts.FirstOrDefault(item => item.Username == user);
+            if (tempAcc == null)
+                return Json(new { result = false, type = 2 }, JsonRequestBehavior.AllowGet);
+            if(tempAcc.Role.RoleID != 1)
+                return Json(new { result = false, type = 2 }, JsonRequestBehavior.AllowGet);
+            int typeRes = 0;
+            if(tempBlog.isBlock == true)
+            {
+                tempBlog.isBlock = false;
+                typeRes = 3; // mở khóa
+            }
+            else
+            {
+                tempBlog.isBlock = true;
+                typeRes = 4; // khóa
+            }
+            db.SaveChanges();            
+                return Json(new { result = true, type = typeRes }, JsonRequestBehavior.AllowGet);
+        }   
+
+        
     }
 }

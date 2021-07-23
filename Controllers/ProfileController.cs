@@ -20,15 +20,20 @@ namespace LLVBog.Controllers
             Account temp = db.Accounts.Where(i => i.Username == acc).FirstOrDefault();
             if (temp == null)
                 return RedirectToAction("Index", "Home");
+            if (temp.RoleID == 1)
+                ViewBag.IsAdmin = true;
             HashSet<String> lstCategory = new HashSet<String>();
             temp.Blogs.ToList().ForEach(i => i.Categories.ToList().ForEach(si => lstCategory.Add(si.Name)));
+
+            List<Blog> result = temp.Blogs.Where(i => i.isBlock != true && i.DeletedDate == null).ToList();
+            temp.Blogs = result;
 
             //Phân trang
             int amount = temp.Blogs.Count();
             int pageMax = amount % 5 == 0 ? amount / 5 : amount / 5 + 1; // lấy stt trang lớn nhất
             if (page > pageMax)
-                page = pageMax; //nếu parameter page > stt lớn nhất => gán page = trang lớn nhất
-
+                page = pageMax; //nếu parameter page > stt lớn nhất => gán page = trang lớn nhất            
+            
             temp.Blogs = temp.Blogs.Skip(5 * ((int)page - 1)).Take(5).ToList();
 
 
@@ -50,18 +55,23 @@ namespace LLVBog.Controllers
                 acc.Blogs.ToList().ForEach(i => i.Categories.ToList().ForEach(si => lstCategory.Add(si.Name)));
                 acc.Blogs.OrderByDescending(i => i.CreatedDate);
 
+                List<Blog> result = acc.Blogs.Where(i => i.isBlock != true && i.DeletedDate == null).ToList();
+                acc.Blogs = result;
 
                 int amount = acc.Blogs.Count();
                 int pageMax = amount % 5 == 0 ? amount / 5 : amount / 5 + 1; // lấy stt trang lớn nhất
                 if (page > pageMax)
                     page = pageMax; //nếu parameter page > stt lớn nhất => gán page = trang lớn nhất
+
+                
+
                 acc.Blogs = acc.Blogs.Skip(5 * ((int)page - 1)).Take(5).ToList();
 
 
                 ViewBag.PageMax = pageMax;
                 ViewBag.PageID = (int)page;
 
-                ViewBag.ListCategory = lstCategory;
+                ViewBag.ListCategory = lstCategory;                
                 return View(acc);
             }
             else return View("Error");
@@ -73,8 +83,11 @@ namespace LLVBog.Controllers
                 return RedirectToAction("Index", "Home");
             String acc = Session["Username"].ToString();
             Account temp = db.Accounts.Where(i => i.Username == acc).FirstOrDefault();
+
             if (temp == null)
                 return RedirectToAction("Index", "Home");
+            if (temp.RoleID == 1)
+                ViewBag.IsAdmin = true;
             NewBlogModel blog = new NewBlogModel();
             blog.Categories = db.Categories.ToList();
             return View(blog);
@@ -100,9 +113,10 @@ namespace LLVBog.Controllers
                     Content = newItem.Content,
                     Account = temp,
                     CreatedDate = DateTime.Now,
-                    TotalView = 0                    
+                    TotalView = 0,
+                    Image = newItem.ImageUrl
                 };
-                if (newItem.Categories.Count() == 0)
+                if (newItem.ThisCategories.Count() == 0)
                     return Json(new { result = false }, JsonRequestBehavior.AllowGet);
                 newItem.ThisCategories.ForEach(item =>
                 {
@@ -127,16 +141,18 @@ namespace LLVBog.Controllers
             if (temp == null)
                 return RedirectToAction("Index", "Home");
             NewBlogModel blog = new NewBlogModel();
-            Blog tempBlog = db.Blogs.Where(item => item.BlogId == id).FirstOrDefault();
+            Blog tempBlog = db.Blogs.Where(item => item.BlogId == id && item.isBlock!=true).FirstOrDefault();
             if(tempBlog == null)
                 return RedirectToAction("Index", "Home");
+            if (temp.RoleID == 1)
+                ViewBag.IsAdmin = true;
             blog.Content = tempBlog.Content;
             blog.Title = tempBlog.Title;
             blog.Id = tempBlog.BlogId;
             blog.ThisCategories = tempBlog.Categories.Select(i => i.CategoryId).ToList();
             blog.Categories = db.Categories.ToList();
+            blog.ImageUrl = tempBlog.Image;
             return View(blog);
-
         }
 
         [HttpPost]
@@ -150,14 +166,15 @@ namespace LLVBog.Controllers
             Account temp = db.Accounts.Where(i => i.Username == acc).FirstOrDefault();
             if (temp == null)
                 return Json(new { result = false }, JsonRequestBehavior.AllowGet);
-            Blog targetItem = db.Blogs.Where(i => i.BlogId == edited.Id).FirstOrDefault();
+            Blog targetItem = db.Blogs.Where(i => i.BlogId == edited.Id && i.Username == temp.Username && i.DeletedDate == null && i.isBlock != true).FirstOrDefault();
             if(targetItem == null)
                 return Json(new { result = false }, JsonRequestBehavior.AllowGet);
             targetItem.Content = edited.Content;
             targetItem.Title = edited.Title;
             targetItem.UpdatedDate = DateTime.Now;
+            targetItem.Image = edited.ImageUrl;
             targetItem.Categories = new List<Category>();
-            if(edited.Categories.Count()==0)
+            if(edited.ThisCategories.Count()==0)
                 return Json(new { result = false }, JsonRequestBehavior.AllowGet);
             edited.ThisCategories.ForEach(item =>
             {
@@ -169,6 +186,26 @@ namespace LLVBog.Controllers
             return Json(new { result = true }, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpPost]
+        public JsonResult Delete(int? id)
+        {
+            if (!ModelState.IsValid)
+                return Json(new { result = false }, JsonRequestBehavior.AllowGet);
+            if (Session["Username"] == null)
+                return Json(new { result = false }, JsonRequestBehavior.AllowGet);
+            String acc = Session["Username"].ToString();
+            Account temp = db.Accounts.Where(i => i.Username == acc).FirstOrDefault();
+            if (temp == null)
+                return Json(new { result = false }, JsonRequestBehavior.AllowGet);
+            Blog targetItem = db.Blogs.Where(i => i.BlogId == id && i.Username == temp.Username).FirstOrDefault();
+            if (targetItem == null)
+                return Json(new { result = false }, JsonRequestBehavior.AllowGet);
+            targetItem.DeletedDate = DateTime.Now;
+            db.SaveChanges();
+            return Json(new { result = true }, JsonRequestBehavior.AllowGet);
+        }
+
+
         public ActionResult ChangePass()
         {
             if (Session["Username"] == null)
@@ -177,6 +214,8 @@ namespace LLVBog.Controllers
             Account temp = db.Accounts.Where(i => i.Username == acc).FirstOrDefault();
             if (temp == null)
                 return RedirectToAction("Index", "Home");
+            if (temp.RoleID == 1)
+                ViewBag.IsAdmin = true;
             ChangePassword handler = new ChangePassword();
             return View(handler);
         }
@@ -193,7 +232,9 @@ namespace LLVBog.Controllers
                 String acc = Session["Username"].ToString();
                 Account temp = db.Accounts.Where(i => i.Username == acc).FirstOrDefault();
                 if (temp == null)
-                    return View("Error");
+                    return RedirectToAction("Index", "Home");
+                if (temp.RoleID == 1)
+                    ViewBag.IsAdmin = true;
                 if (!temp.Password.Equals(LoginController.GetMD5(changeInfor.oldPassword)))
                 {
                     ModelState.AddModelError("", "Mật khẩu cũ không khớp");
@@ -218,7 +259,9 @@ namespace LLVBog.Controllers
             String acc = Session["Username"].ToString();
             Account temp = db.Accounts.Where(i => i.Username == acc).FirstOrDefault();
             if (temp == null)
-                return View("Error");
+                return RedirectToAction("Index","Home");
+            if (temp.RoleID == 1)
+                ViewBag.IsAdmin = true;
             return View(temp);
         }
 
@@ -232,6 +275,8 @@ namespace LLVBog.Controllers
             Account temp = db.Accounts.Where(i => i.Username == acc).FirstOrDefault();
             if (temp == null)
                 return RedirectToAction("Index", "Home");
+            if (temp.RoleID == 1)
+                ViewBag.IsAdmin = true;
             temp.FirstName = form["FirstName"];
             temp.LastName = form["LastName"];
             temp.Gmail = form["Gmail"];

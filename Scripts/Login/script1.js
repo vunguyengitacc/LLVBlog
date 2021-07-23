@@ -39,13 +39,12 @@ $('.login-reg-panel input[type="radio"]').on('change', function () {
 function validateForm() {
     let x = document.forms["fLogin"]["Username"].value;
     let y = document.forms["fLogin"]["Password"].value;
-    let form = document.getElementById("Validate"); 
     if (x == "") {
-        form.innerHTML = "Không được bỏ trống tên tài khoản"
+        alert("Không được bỏ trống tên tài khoản");
         return false;
     }
     else if (y == "") {
-        form.innerHTML = "Không được bỏ trống mật khẩu";
+        alert("Không được bỏ trống mật khẩu");
         return false;
     }
 }

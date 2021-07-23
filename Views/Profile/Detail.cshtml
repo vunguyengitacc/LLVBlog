@@ -14,8 +14,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="text-content">
-                        <h4>Trang cá nhân</h4>
-                        <h2>@Model.FirstName @Model.LastName</h2>
+                        <h4>Trang cá nhân</h4>                        
                     </div>
                 </div>
             </div>
@@ -77,6 +76,10 @@
                                     <h2 class="text-title">Tác vụ</h2>
                                 </div>
                                 <div class="content">
+                                    @if (ViewBag.IsAdmin != null && ViewBag.IsAdmin == true)
+                                    {
+                                        <div class="content-item"><a href="/Admin/Account">Tới trang quản trị</a></div>
+                                    }
                                     <div class="content-item"><a href="CreateNew">Đăng bài</a></div>
                                     <div class="content-item"><a href="#">Thông tin tài khoản</a></div>
                                     <div class="content-item"><a href="ChangePass">Đổi mật khẩu</a></div>

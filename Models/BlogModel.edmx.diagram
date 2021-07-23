@@ -4,21 +4,18 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="18e6f07157994ee1ab76c2810cf7502a" Name="Diagram1">
-        <EntityTypeShape EntityType="BlogDataModel.Account" Width="1.5" PointX="3" PointY="3.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="BlogDataModel.AccountActivation" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="BlogDataModel.AccountResetPass" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="BlogDataModel.Action" Width="1.5" PointX="7.5" PointY="3.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="BlogDataModel.Blog" Width="1.5" PointX="5.25" PointY="3.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="BlogDataModel.Category" Width="1.5" PointX="7.5" PointY="7.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="BlogDataModel.Comment" Width="1.5" PointX="7.5" PointY="0.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="BlogDataModel.Role" Width="1.5" PointX="0.75" PointY="4.25" IsExpanded="true" />
+      <Diagram DiagramId="b945ebdc046c489ab07f06820a91f9be" Name="Diagram1">
+        <EntityTypeShape EntityType="BlogDataModel.Account" Width="1.5" PointX="3" PointY="2" IsExpanded="true" />
+        <EntityTypeShape EntityType="BlogDataModel.AccountActivation" Width="1.5" PointX="0.75" PointY="5.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="BlogDataModel.AccountResetPass" Width="1.5" PointX="2.75" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="BlogDataModel.Action" Width="1.5" PointX="7.5" PointY="2.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="BlogDataModel.Blog" Width="1.5" PointX="5.25" PointY="1.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="BlogDataModel.Category" Width="1.5" PointX="7.5" PointY="5.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="BlogDataModel.Role" Width="1.5" PointX="0.75" PointY="2.75" IsExpanded="true" />
         <AssociationConnector Association="BlogDataModel.FK_Account_Role" ManuallyRouted="false" />
         <AssociationConnector Association="BlogDataModel.FK_Blog_Account" ManuallyRouted="false" />
-        <AssociationConnector Association="BlogDataModel.FK_Comment_Account" ManuallyRouted="false" />
         <AssociationConnector Association="BlogDataModel.FK_Vote_Account" ManuallyRouted="false" />
         <AssociationConnector Association="BlogDataModel.FK_Vote_Blog" ManuallyRouted="false" />
-        <AssociationConnector Association="BlogDataModel.FK_Comment_Blog" ManuallyRouted="false" />
         <AssociationConnector Association="BlogDataModel.BlogHasCategory" ManuallyRouted="false" />
       </Diagram>
     </edmx:Diagrams>

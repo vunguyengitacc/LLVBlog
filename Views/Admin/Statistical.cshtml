@@ -1,14 +1,12 @@
 ﻿@model PagedList.IPagedList<LLVBog.Models.Blog>
-
 @using PagedList.Mvc;
 @{
-    ViewBag.Title = "Post";
+    ViewBag.Title = "Statistical";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
-
 <div class="row">
-    <div class="col-lg-12" style="color:chocolate">
-        <h1 class="page-header" style="text-align:center"><strong>QUẢN LÝ BÀI VIẾT</strong></h1>
+    <div class="col-lg-12" style="color:blue">
+        <h1 class="page-header" style="text-align:center"><strong>THỐNG KÊ</strong></h1>
     </div>
     <!-- /.col-lg-12 -->
 </div>
@@ -16,17 +14,15 @@
 <div class="row">
     <div class="col-lg-12">
         <div class="panel panel-default">
-            <div class="panel-heading" style="color: chocolate; font-size: 18px">
-                Danh sách bài viết bị báo cáo
+            <div class="panel-heading" style="color: blue; font-size: 18px">
+                Bảng thống kê
             </div>
             <!-- /.panel-heading -->
             <div class="panel-body">
                 <div class="table-responsive">
                     <div id="dataTables-example_wapper" class="dataTables_wrapper form-inline dt-bootstrap no-footer">
                         <div class="row">
-
-
-                            @using (Html.BeginForm("Post", "Admin", FormMethod.Get, new { @class = "d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search" }))
+                            @using (Html.BeginForm("Statistical", "Admin", FormMethod.Get, new { @class = "d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search" }))
                             {
                                 <form class="form-inline mr-2">
                                     <div class="col-sm-6">
@@ -35,13 +31,11 @@
                                                    aria-label="Search" aria-describedby="basic-addon2">
 
                                             <button class="btn btn-primary" type="submit">Tìm kiếm</button>
-                                            <button class="btn btn-info" type="button" onclick="window.location.href='/Admin/Post'">Reset </button>
+                                            <button class="btn btn-info" type="button" onclick="window.location.href='/Admin/Statistical'">Reset </button>
                                         </div>
-
                                     </div>
                                 </form>
                             }
-
                         </div>
                         <div class="row">
 
@@ -54,10 +48,12 @@
                                             <th>Mã Blog</th>
                                             <th>Tiêu đề</th>
                                             <th>Nội dung</th>
+                                            <th>Ngày tạo</th>
+                                            <th>Ngày cập nhật</th>
                                             <th>Ngày xóa</th>
-                                            <th>Tình trạng</th>
                                             <th>Tên người dùng</th>
-                                            <th>Tổng lượt xem</th>                                            
+                                            <th>Tổng lượt xem</th>
+                                            <th>Tình trạng</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -67,7 +63,11 @@
                                             <td>@item.BlogId</td>
                                             <td>@item.Title</td>
                                             <td><a href="~/Blog/Content/@item.BlogId">Đi tới bài viết</a></td>
+                                            <td>@item.CreatedDate</td>
+                                            <td>@item.UpdatedDate</td>
                                             <td>@item.DeletedDate</td>
+                                            <td>@item.Username</td>
+                                            <td>@item.TotalView</td>
                                             @if (item.isBlock == true)
                                             {
                                                 <td class="text-danger">Đã khóa</td>
@@ -76,9 +76,6 @@
                                             {
                                                 <td class="text-primary">Mở khóa</td>
                                             }
-                                            <td>@item.Username</td>
-                                            <td>@item.TotalView</td>
-
                                         </tr>
 
                                         }
@@ -88,7 +85,7 @@
                                 <br />
                                 Trang @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) / @Model.PageCount
 
-                                @Html.PagedListPager(Model, page => Url.Action("Post", new { page }))
+                                @Html.PagedListPager(Model, page => Url.Action("Statistical", new { page }))
                                 <!-- Kết thúc -->
                             </div>
                         </div>
@@ -101,9 +98,6 @@
             </div>
             <!-- /.col-lg-12 -->
         </div>
-
-
-
     </div>
     <!-- /.container-fluid -->
 </div>

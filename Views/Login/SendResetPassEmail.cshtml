@@ -1,5 +1,4 @@
 ﻿@model LLVBog.Models.Account
-
 @{
     Layout = null;
 }
@@ -8,7 +7,7 @@
 <html>
 <head>
 
-    <title>Đăng nhập</title>
+    <title>Quên mật khẩu</title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -21,27 +20,18 @@
 
 <body>
     <div class="w3layoutscontaineragileits">
-        <h2>Đăng nhập</h2>
-        @using (Html.BeginForm("Login", "Login", FormMethod.Post))
-        {
-
+        <h2>Quên mật khẩu</h2>
+        <label>@ViewBag.Message</label>
+        <form action="/Login/ForgetPassword" method="post">
             @Html.AntiForgeryToken()
-            <label>@ViewBag.Message</label>
-            <input id="Username" name="Username" type="text" placeholder="Tên đăng nhập/Email">
-            <input id="Password" name="Password" type="password" placeholder="Mật khẩu">
-            <ul class="agileinfotickwthree">
-                <li>
-                    <a href="/Login/SendResetPassEmail">Quên mật khẩu ?</a>
-                </li>
-            </ul>
+            <input id="Gmail" name="Gmail" type="email" placeholder="Nhập vào gmail đăng ký tài khoản">
             <div class="aitssendbuttonw3ls">
-                <input type="submit" value="Đăng nhập">
-                <p><a class="w3_play_icon1" href="/Login/Register"> Tạo tài khoản?</a></p>
-                <p><a class="w3_play_icon1" href="/Home"> Về trang chủ</a></p>
+                <input type="submit" value="Gửi">
+                <p><a class="w3_play_icon1" href="/Login/Login"> Quay lại trang đăng nhập?</a></p>
                 <div class="clear"></div>
             </div>
-        }
+        </form>
     </div>
-    <script src="~/Scripts/Login/script1.js"></script>
+
 </body>
 </html>

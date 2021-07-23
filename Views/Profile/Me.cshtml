@@ -32,11 +32,11 @@
                         </div>
                         @foreach (var item in Model.Blogs)
                         {
+
                             <div class="col-lg-12">
                                 <div class="blog-post row custom-shadow">
                                     <div class="col-lg-4" style="padding: 0">
-                                        <img src="~/Content/Home/images/heading-bg.jpg" style="width: 100% ; height: 100%;">
-
+                                        <img src="@item.Image" style="width: 100% ; height: 100%;">
                                     </div>
                                     <div class="down-content col-lg-8">
                                         <div class="post-options">
@@ -100,6 +100,9 @@
                                     </div>
                                 </div>
                             </div>
+
+
+
                         }
 
 
@@ -145,6 +148,10 @@
                                 </div>
 
                                 <div class="content">
+                                    @if (ViewBag.IsAdmin != null && ViewBag.IsAdmin == true)
+                                    {
+                                        <div class="content-item"><a href="/Admin/Account">Tới trang quản trị</a></div>
+                                    }
                                     <div class="content-item"><a href="CreateNew">Đăng bài</a></div>
                                     <div class="content-item"><a href="Detail">Thông tin tài khoản</a></div>
                                     <div class="content-item"><a href="ChangePass">Đổi mật khẩu</a></div>

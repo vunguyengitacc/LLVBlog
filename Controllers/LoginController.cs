@@ -19,27 +19,14 @@ namespace LLVBog.Controllers
 
         private BlogDataEntities _db = new BlogDataEntities();
 
-        public ActionResult Index()
+        public ActionResult Register()
         {
-            if (Session["Username"] != null)
-            {
-                return View();
-            }
-            else
-            {
-                return RedirectToAction("Login");
-            }
+            return View();
         }
-        public ActionResult Index_Admin()
+
+        public ActionResult SendResetPassEmail()
         {
-            if (Session["Username"] != null)
-            {
-                return View();
-            }
-            else
-            {
-                return RedirectToAction("Login");
-            }
+            return View();
         }
 
         // GET: Login
@@ -173,7 +160,7 @@ namespace LLVBog.Controllers
                 {
                     _db.AccountActivations.Remove(accountActivation);
                     _db.SaveChanges();
-                    ViewBag.Message = "Activation successful.";
+                    ViewBag.Message = "Kích hoạt thành công.";
                 }
             }
 

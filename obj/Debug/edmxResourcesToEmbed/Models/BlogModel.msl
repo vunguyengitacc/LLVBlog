@@ -55,6 +55,7 @@
           <ScalarProperty Name="Username" ColumnName="Username" />
           <ScalarProperty Name="Title" ColumnName="Title" />
           <ScalarProperty Name="TotalView" ColumnName="TotalView" />
+          <ScalarProperty Name="Image" ColumnName="Image" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -63,16 +64,7 @@
         <MappingFragment StoreEntitySet="Category">
           <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
           <ScalarProperty Name="Name" ColumnName="Name" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="Comments">
-      <EntityTypeMapping TypeName="BlogDataModel.Comment">
-        <MappingFragment StoreEntitySet="Comment">
-          <ScalarProperty Name="CommentId" ColumnName="CommentId" />
-          <ScalarProperty Name="Content" ColumnName="Content" />
-          <ScalarProperty Name="Username" ColumnName="Username" />
-          <ScalarProperty Name="BlogId" ColumnName="BlogId" />
+          <ScalarProperty Name="Image" ColumnName="Image" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

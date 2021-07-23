@@ -17,13 +17,13 @@ namespace LLVBog.Controllers
         {
             List<Blog> lstPost = new List<Blog>();
             if (type == 4) //Xếp theo lượt vote
-                lstPost = db.Blogs.OrderByDescending(i => i.Actions.Where(si => si.Vote == true).Count() - i.Actions.Where(si => si.Vote == false).Count()).ToList();
+                lstPost = db.Blogs.Where(i=>i.isBlock!=true && i.DeletedDate == null).OrderByDescending(i => i.Actions.Where(si => si.Vote == true).Count() - i.Actions.Where(si => si.Vote == false).Count()).ToList();
             else if (type == 3)// Xếp theo lượt xem
-                lstPost = db.Blogs.OrderByDescending(i => i.TotalView).ToList();
+                lstPost = db.Blogs.Where(i => i.isBlock != true && i.DeletedDate == null).OrderByDescending(i => i.TotalView).ToList();
             else if (type == 2) //Xếp theo tiêu đề
-                lstPost = db.Blogs.OrderBy(i => i.Title).ToList();
+                lstPost = db.Blogs.Where(i => i.isBlock != true && i.DeletedDate == null).OrderBy(i => i.Title).ToList();
             else //Xếp theo ngày đăng
-                lstPost = db.Blogs.OrderByDescending(i => i.CreatedDate).ToList();
+                lstPost = db.Blogs.Where(i => i.isBlock != true && i.DeletedDate == null).OrderByDescending(i => i.CreatedDate).ToList();
             return lstPost;
         }
 
@@ -63,34 +63,57 @@ namespace LLVBog.Controllers
 
         public ActionResult Content(int? id)
         {
-            if (Session["Username"] != null)
+            if (id == 0 || id == null)
+                return View("Error");
+            if (Session["Username"] == null)
+            {   
+                Blog post = db.Blogs.Where(i => i.BlogId == id && (i.isBlock!=true && i.DeletedDate==null)).FirstOrDefault();
+                if (post == null)
+                    return RedirectToAction("Index", "Home");
+                HashSet<Blog> anotherPost = new HashSet<Blog>();
+                anotherPost.Add(post);
+                foreach (var item in post.Categories)
+                {
+                    db.Blogs.Where(i => i.Categories
+                                    .Where(si => si.Name == item.Name)
+                                    .Count() != 0).ToList()
+                                    .ForEach(fi =>
+                                    {
+                                        anotherPost.Add(fi);
+                                    });
+
+                }
+                anotherPost.Remove(post);
+                ViewBag.anotherPost = anotherPost.OrderBy(i => i.TotalView).Take(3);
+                return View(post);
+            }
+            else
             {
                 string username = Session["Username"].ToString();
                 ViewBag.UserAction = db.Actions.FirstOrDefault(item => item.BlogId == id && item.Username == username);
-            }
-                
+                Account thisAccount = db.Accounts.FirstOrDefault(i => i.Username == username);
 
-            if (id == 0 || id == null)
-                return View("Error");
-            Blog post = db.Blogs.Where(i => i.BlogId == id).FirstOrDefault();
-            if (post == null)
-                return View("Error");
-            HashSet<Blog> anotherPost = new HashSet<Blog>();
-            anotherPost.Add(post);
-            foreach (var item in post.Categories)
-            {
-                db.Blogs.Where(i => i.Categories
-                                .Where(si => si.Name == item.Name)
-                                .Count() != 0).ToList()
-                                .ForEach(fi =>
-                                {
-                                    anotherPost.Add(fi);
-                                });
-
+                Blog post = db.Blogs.Where(i => i.BlogId == id).FirstOrDefault();
+                if (thisAccount.Role.RoleID == 1)
+                    ViewBag.IsAdminSession = true;
+                else if (post.isBlock == true || post.DeletedDate == null)
+                    return RedirectToAction("Index", "Home");
+                HashSet<Blog> anotherPost = new HashSet<Blog>();
+                anotherPost.Add(post);
+                foreach (var item in post.Categories)
+                {
+                    db.Blogs.Where(i => i.Categories
+                                    .Where(si => si.Name == item.Name)
+                                    .Count() != 0).ToList()
+                                    .ForEach(fi =>
+                                    {
+                                        anotherPost.Add(fi);
+                                    });
+                }
+                anotherPost.Remove(post);
+                ViewBag.anotherPost = anotherPost.OrderBy(i => i.TotalView).Take(3);
+                return View(post);
             }
-            anotherPost.Remove(post);
-            ViewBag.anotherPost = anotherPost.OrderBy(i => i.TotalView).Take(3);
-            return View(post);
 
         }
 
@@ -120,9 +143,10 @@ namespace LLVBog.Controllers
             ViewBag.SortType = (int)sort;
             ViewBag.lstHotPosts = lstHotPosts;
             ViewBag.Category = category;
+            ViewBag.Query = q;
             int pageNumber = (page ?? 1);
 
-            return View(lstPost.ToPagedList(pageNumber, 4));
+            return View(lstPost.ToPagedList(pageNumber, 5));
         }
     }
 

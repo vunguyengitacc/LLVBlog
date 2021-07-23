@@ -1,0 +1,33 @@
+﻿@model LLVBog.Models.ContactUs
+
+@{
+    ViewBag.Page = "Contact";
+    Layout = "~/Views/Shared/_HomeLayout.cshtml";
+}
+
+    <div class="contact-us row">
+        <h2>Liên hệ</h2>
+        <label>@ViewBag.Message</label>
+        @using (Html.BeginForm("Index", "ContactUs", FormMethod.Post, new { @class = "form-profile contact-form col-lg-8  offset-2" }))
+        {
+            <label>Gửi mail liên hệ với chúng tôi</label>
+            if (Session["Username"] == null)
+            {
+                <input id="Gmail" name="Gmail" type="email" placeholder="Email">
+                @Html.ValidationMessageFor(model => model.Gmail, "", new { @class = "message" })
+                <input style="height:250px;text-align:match-parent;" id="Message" name="Message" type="text" placeholder="Phản hồi">
+                @Html.ValidationMessageFor(model => model.Message, "", new { @class = "message" })
+            }
+            else
+            {
+                <input id="Username" name="Username" type="text" readonly value="@Session["Username"]" placeholder="Tên đăng nhập">
+                <input id="Gmail" name="Gmail" type="email" readonly value="@Session["Email"]" placeholder="Email">
+                <input style="height:250px;text-align:match-parent;" id="Message" name="Message" type="text" placeholder="Phản hồi">
+            }
+            <div class="aitssendbuttonw3ls">
+                <input type="submit" value="Gửi">                
+                <div class="clear"></div>
+            </div>
+        }
+    </div>
+    <script src="~/Scripts/Login/script1.js"></script>

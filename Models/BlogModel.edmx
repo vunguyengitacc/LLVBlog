@@ -10,7 +10,7 @@
             <PropertyRef Name="Username" />
           </Key>
           <Property Name="Username" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="Password" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="Password" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="FirstName" Type="nvarchar" MaxLength="50" />
           <Property Name="LastName" Type="nvarchar" MaxLength="50" />
           <Property Name="CreatedDate" Type="datetime" Nullable="false" />
@@ -57,6 +57,7 @@
           <Property Name="Username" Type="varchar" MaxLength="30" />
           <Property Name="Title" Type="nvarchar" MaxLength="100" Nullable="false" />
           <Property Name="TotalView" Type="int" />
+          <Property Name="Image" Type="varchar" MaxLength="500" />
         </EntityType>
         <EntityType Name="BlogHasCategory">
           <Key>
@@ -72,15 +73,7 @@
           </Key>
           <Property Name="CategoryId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
-        </EntityType>
-        <EntityType Name="Comment">
-          <Key>
-            <PropertyRef Name="CommentId" />
-          </Key>
-          <Property Name="CommentId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Content" Type="nvarchar" MaxLength="200" Nullable="false" />
-          <Property Name="Username" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="BlogId" Type="int" Nullable="false" />
+          <Property Name="Image" Type="nvarchar" MaxLength="500" />
         </EntityType>
         <EntityType Name="Role">
           <Key>
@@ -137,30 +130,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Comment_Account">
-          <End Role="Account" Type="Self.Account" Multiplicity="1" />
-          <End Role="Comment" Type="Self.Comment" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Account">
-              <PropertyRef Name="Username" />
-            </Principal>
-            <Dependent Role="Comment">
-              <PropertyRef Name="Username" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Comment_Blog">
-          <End Role="Blog" Type="Self.Blog" Multiplicity="1" />
-          <End Role="Comment" Type="Self.Comment" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Blog">
-              <PropertyRef Name="BlogId" />
-            </Principal>
-            <Dependent Role="Comment">
-              <PropertyRef Name="BlogId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Vote_Account">
           <End Role="Account" Type="Self.Account" Multiplicity="1" />
           <End Role="Action" Type="Self.Action" Multiplicity="*" />
@@ -193,7 +162,6 @@
           <EntitySet Name="Blog" EntityType="Self.Blog" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="BlogHasCategory" EntityType="Self.BlogHasCategory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Category" EntityType="Self.Category" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Comment" EntityType="Self.Comment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Role" EntityType="Self.Role" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_Account_Role" Association="Self.FK_Account_Role">
             <End Role="Role" EntitySet="Role" />
@@ -210,14 +178,6 @@
           <AssociationSet Name="FK_BlogHasCategory_Category" Association="Self.FK_BlogHasCategory_Category">
             <End Role="Category" EntitySet="Category" />
             <End Role="BlogHasCategory" EntitySet="BlogHasCategory" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Comment_Account" Association="Self.FK_Comment_Account">
-            <End Role="Account" EntitySet="Account" />
-            <End Role="Comment" EntitySet="Comment" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Comment_Blog" Association="Self.FK_Comment_Blog">
-            <End Role="Blog" EntitySet="Blog" />
-            <End Role="Comment" EntitySet="Comment" />
           </AssociationSet>
           <AssociationSet Name="FK_Vote_Account" Association="Self.FK_Vote_Account">
             <End Role="Account" EntitySet="Account" />
@@ -238,7 +198,7 @@
             <PropertyRef Name="Username" />
           </Key>
           <Property Name="Username" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Password" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
@@ -246,7 +206,6 @@
           <Property Name="RoleID" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Role" Relationship="Self.FK_Account_Role" FromRole="Account" ToRole="Role" />
           <NavigationProperty Name="Blogs" Relationship="Self.FK_Blog_Account" FromRole="Account" ToRole="Blog" />
-          <NavigationProperty Name="Comments" Relationship="Self.FK_Comment_Account" FromRole="Account" ToRole="Comment" />
           <NavigationProperty Name="Actions" Relationship="Self.FK_Vote_Account" FromRole="Account" ToRole="Action" />
         </EntityType>
         <EntityType Name="AccountActivation">
@@ -291,9 +250,9 @@
           <Property Name="Username" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="Title" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="TotalView" Type="Int32" />
+          <Property Name="Image" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Account" Relationship="Self.FK_Blog_Account" FromRole="Blog" ToRole="Account" />
           <NavigationProperty Name="Actions" Relationship="Self.FK_Vote_Blog" FromRole="Blog" ToRole="Action" />
-          <NavigationProperty Name="Comments" Relationship="Self.FK_Comment_Blog" FromRole="Blog" ToRole="Comment" />
           <NavigationProperty Name="Categories" Relationship="Self.BlogHasCategory" FromRole="Blog" ToRole="Category" />
         </EntityType>
         <EntityType Name="Category">
@@ -302,18 +261,8 @@
           </Key>
           <Property Name="CategoryId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Image" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Blogs" Relationship="Self.BlogHasCategory" FromRole="Category" ToRole="Blog" />
-        </EntityType>
-        <EntityType Name="Comment">
-          <Key>
-            <PropertyRef Name="CommentId" />
-          </Key>
-          <Property Name="CommentId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Content" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Username" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="BlogId" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Account" Relationship="Self.FK_Comment_Account" FromRole="Comment" ToRole="Account" />
-          <NavigationProperty Name="Blog" Relationship="Self.FK_Comment_Blog" FromRole="Comment" ToRole="Blog" />
         </EntityType>
         <EntityType Name="Role">
           <Key>
@@ -347,18 +296,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Comment_Account">
-          <End Role="Account" Type="Self.Account" Multiplicity="1" />
-          <End Role="Comment" Type="Self.Comment" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Account">
-              <PropertyRef Name="Username" />
-            </Principal>
-            <Dependent Role="Comment">
-              <PropertyRef Name="Username" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Vote_Account">
           <End Role="Account" Type="Self.Account" Multiplicity="1" />
           <End Role="Action" Type="Self.Action" Multiplicity="*" />
@@ -383,18 +320,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Comment_Blog">
-          <End Role="Blog" Type="Self.Blog" Multiplicity="1" />
-          <End Role="Comment" Type="Self.Comment" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Blog">
-              <PropertyRef Name="BlogId" />
-            </Principal>
-            <Dependent Role="Comment">
-              <PropertyRef Name="BlogId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="BlogHasCategory">
           <End Role="Blog" Type="Self.Blog" Multiplicity="*" />
           <End Role="Category" Type="Self.Category" Multiplicity="*" />
@@ -406,7 +331,6 @@
           <EntitySet Name="Actions" EntityType="Self.Action" />
           <EntitySet Name="Blogs" EntityType="Self.Blog" />
           <EntitySet Name="Categories" EntityType="Self.Category" />
-          <EntitySet Name="Comments" EntityType="Self.Comment" />
           <EntitySet Name="Roles" EntityType="Self.Role" />
           <AssociationSet Name="FK_Account_Role" Association="Self.FK_Account_Role">
             <End Role="Role" EntitySet="Roles" />
@@ -416,10 +340,6 @@
             <End Role="Account" EntitySet="Accounts" />
             <End Role="Blog" EntitySet="Blogs" />
           </AssociationSet>
-          <AssociationSet Name="FK_Comment_Account" Association="Self.FK_Comment_Account">
-            <End Role="Account" EntitySet="Accounts" />
-            <End Role="Comment" EntitySet="Comments" />
-          </AssociationSet>
           <AssociationSet Name="FK_Vote_Account" Association="Self.FK_Vote_Account">
             <End Role="Account" EntitySet="Accounts" />
             <End Role="Action" EntitySet="Actions" />
@@ -427,10 +347,6 @@
           <AssociationSet Name="FK_Vote_Blog" Association="Self.FK_Vote_Blog">
             <End Role="Blog" EntitySet="Blogs" />
             <End Role="Action" EntitySet="Actions" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Comment_Blog" Association="Self.FK_Comment_Blog">
-            <End Role="Blog" EntitySet="Blogs" />
-            <End Role="Comment" EntitySet="Comments" />
           </AssociationSet>
           <AssociationSet Name="BlogHasCategory" Association="Self.BlogHasCategory">
             <End Role="Blog" EntitySet="Blogs" />
@@ -497,6 +413,7 @@
                 <ScalarProperty Name="Username" ColumnName="Username" />
                 <ScalarProperty Name="Title" ColumnName="Title" />
                 <ScalarProperty Name="TotalView" ColumnName="TotalView" />
+                <ScalarProperty Name="Image" ColumnName="Image" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -505,16 +422,7 @@
               <MappingFragment StoreEntitySet="Category">
                 <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Comments">
-            <EntityTypeMapping TypeName="BlogDataModel.Comment">
-              <MappingFragment StoreEntitySet="Comment">
-                <ScalarProperty Name="CommentId" ColumnName="CommentId" />
-                <ScalarProperty Name="Content" ColumnName="Content" />
-                <ScalarProperty Name="Username" ColumnName="Username" />
-                <ScalarProperty Name="BlogId" ColumnName="BlogId" />
+                <ScalarProperty Name="Image" ColumnName="Image" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

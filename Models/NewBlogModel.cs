@@ -10,8 +10,13 @@ namespace LLVBog.Models
     {
 
         public int Id { get; set; }
+        
+
+        [Display(Name = "Đường dẫn ảnh bìa")]
+        public string ImageUrl {get; set;}
+
         [Required]
-        [StringLength(2000, MinimumLength = 100, ErrorMessage = "Tối thiểu 100 kí tự")]
+        [MinLength(100)]
         public string Content { get; set; }
         [Required]
         [StringLength(250, ErrorMessage = "Tối đa 250 kí tự")]

@@ -18,7 +18,6 @@ namespace LLVBog.Models
         public Blog()
         {
             this.Actions = new HashSet<Action>();
-            this.Comments = new HashSet<Comment>();
             this.Categories = new HashSet<Category>();
         }
     
@@ -31,12 +30,11 @@ namespace LLVBog.Models
         public string Username { get; set; }
         public string Title { get; set; }
         public Nullable<int> TotalView { get; set; }
+        public string Image { get; set; }
     
         public virtual Account Account { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Action> Actions { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Comment> Comments { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Category> Categories { get; set; }
     }
